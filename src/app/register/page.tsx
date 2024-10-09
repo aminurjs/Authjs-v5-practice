@@ -1,3 +1,4 @@
+import { register } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +20,7 @@ const Register = () => {
         <CardTitle className="text-xl"> Welcome to MyShop</CardTitle>
         <CardDescription> Please provide all the necessary information</CardDescription>
       </CardHeader>{" "}
-      <form className="my-4" action="{register}">
+      <form className="my-4" action={register}>
         <CardContent className="grid gap-4">
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             <div className="flex flex-col">
