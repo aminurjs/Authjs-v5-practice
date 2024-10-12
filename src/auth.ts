@@ -3,9 +3,20 @@ import Credentials from "next-auth/providers/credentials";
 import connectDB from "./lib/db";
 import { User } from "./models/user-models";
 import { compare } from "bcryptjs";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRETE,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRETE,
+    }),
+
     Credentials({
       name: "credentials",
       credentials: {
@@ -51,7 +62,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+
   pages: {
     signIn: "/login",
+  },
+
+  callbacks: {
+    // Handles user sign-in, adds to DB if not existing
+    async signIn({ user, account }) {
+      await connectDB();
+
+      // Check if user exists based on email
+      let existingUser = await User.findOne({ email: user.email });
+
+      if (!existingUser) {
+        // If user doesn’t exist, create a new record
+        existingUser = await User.create({
+          firstName: user?.name?.split(" ")[0] || "User",
+          lastName: user?.name?.split(" ")[1] || "LastName",
+          email: user.email,
+          image: user.image,
+          authProviderId: account?.id, // Store provider ID for reference
+          role: "user", // Default role, can be customized as needed
+        });
+      }
+      return true; // Proceed with login
+    },
   },
 });

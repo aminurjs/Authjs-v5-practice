@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -7,8 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
+  const session = await auth();
+  if (!session?.user) redirect("/login");
   return (
     <div className="flex min-h-screen">
       <div className="flex-1 bg-gray-100 dark:bg-gray-950">

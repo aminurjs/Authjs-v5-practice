@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { CircleUser, Menu, Package2, Search } from "lucide-react";
+import { Menu, Package2, Search } from "lucide-react";
 import { Input } from "./ui/input";
 import {
   DropdownMenu,
@@ -11,21 +11,23 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { auth, signOut } from "@/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = async () => {
-  const user = false;
-
+  const session = await auth();
+  console.log(session);
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <Link href="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+        <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
           <Package2 className="h-6 w-6" />
           <span className="sr-only">Acme Inc</span>
         </Link>
-        <Link href="#" className="text-foreground transition-colors hover:text-foreground">
+        <Link href="/dashboard" className="text-foreground transition-colors hover:text-foreground">
           Dashboard
         </Link>
-        <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
+        {/* <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
           Orders
         </Link>
         <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
@@ -36,7 +38,7 @@ const Navbar = async () => {
         </Link>
         <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">
           Analytics
-        </Link>
+        </Link> */}
       </nav>
       <Sheet>
         <SheetTrigger asChild>
@@ -47,14 +49,14 @@ const Navbar = async () => {
         </SheetTrigger>
         <SheetContent side="left">
           <nav className="grid gap-6 text-lg font-medium">
-            <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
+            <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
               <Package2 className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </Link>
-            <Link href="#" className="hover:text-foreground">
+            <Link href="/dashboard" className="hover:text-foreground">
               Dashboard
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground">
+            {/* <Link href="#" className="text-muted-foreground hover:text-foreground">
               Orders
             </Link>
             <Link href="#" className="text-muted-foreground hover:text-foreground">
@@ -65,7 +67,7 @@ const Navbar = async () => {
             </Link>
             <Link href="#" className="text-muted-foreground hover:text-foreground">
               Analytics
-            </Link>
+            </Link> */}
           </nav>
         </SheetContent>
       </Sheet>
@@ -77,24 +79,43 @@ const Navbar = async () => {
               type="search"
               placeholder="Search products..."
               className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+              readOnly
             />
           </div>
         </form>
-        {user ? (
+        {session?.user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
+                <Avatar>
+                  <AvatarImage src={session.user.image || ""} />
+                  <AvatarFallback>
+                    {session?.user?.name
+                      ?.split(" ")
+                      .map((part) => part[0].toUpperCase())
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut();
+                  }}
+                >
+                  <button type="submit">Logout</button>
+                </form>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

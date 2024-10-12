@@ -1,4 +1,5 @@
 import { register } from "@/actions/auth";
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,9 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const Register = () => {
+const Register = async () => {
+  const session = await auth();
+  if (session?.user) redirect("/dashboard");
   return (
     <Card className="mt-10 max-w-md w-full mx-auto">
       <CardHeader>
