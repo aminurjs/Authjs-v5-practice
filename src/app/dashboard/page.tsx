@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import connectDB from "@/lib/db";
-import User from "@/models/user-models";
+import { User } from "@/models/user-models";
 import { redirect } from "next/navigation";
 
 const Dashboard = async () => {

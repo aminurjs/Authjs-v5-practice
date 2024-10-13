@@ -2,7 +2,7 @@
 
 import { signIn } from "@/auth";
 import connectDB from "@/lib/db";
-import User from "@/models/user-models";
+import { User } from "@/models/user-models";
 import { hash } from "bcryptjs";
 import { CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
