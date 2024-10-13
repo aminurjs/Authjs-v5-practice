@@ -8,11 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import connectDB from "@/lib/db";
+import { User } from "@/models/user-models";
 import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
   const session = await auth();
   if (!session?.user) redirect("/login");
+
+  await connectDB();
+  const data = User.find().lean();
+
   return (
     <div className="flex min-h-screen">
       <div className="flex-1 bg-gray-100 dark:bg-gray-950">
@@ -73,42 +79,14 @@ const Dashboard = async () => {
                   </TableHeader>
 
                   <TableBody>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>John Doe</TableCell>
-                      <TableCell>john@example.com</TableCell>
-                      <TableCell>Pro</TableCell>
-                      <TableCell>2024-04-16</TableCell>
-                    </TableRow>
+                    {(await data).map((item) => (
+                      <TableRow key={String(item._id)}>
+                        <TableCell>{item.firstName + " " + item.lastName}</TableCell>
+                        <TableCell>{item.email}</TableCell>
+                        <TableCell>{item.role}</TableCell>
+                        <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </CardContent>

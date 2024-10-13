@@ -16,7 +16,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = async () => {
   const session = await auth();
-  console.log(session);
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -73,7 +72,7 @@ const Navbar = async () => {
       </Sheet>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <form className="ml-auto flex-1 sm:flex-initial">
-          <div className="relative">
+          <div className="relative cursor-not-allowed">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
@@ -88,7 +87,7 @@ const Navbar = async () => {
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={session.user.image || ""} />
+                  {<AvatarImage src={session.user.image || ""} />}
                   <AvatarFallback>
                     {session?.user?.name
                       ?.split(" ")
@@ -103,17 +102,17 @@ const Navbar = async () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">Support</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-not-allowed">Settings</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-not-allowed">Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem className="cursor-pointer" title="Log out">
                 <form
                   action={async () => {
                     "use server";
                     await signOut();
                   }}
                 >
-                  <button type="submit">Logout</button>
+                  <button type="submit">Log out</button>
                 </form>
               </DropdownMenuItem>
             </DropdownMenuContent>

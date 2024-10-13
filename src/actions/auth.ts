@@ -22,7 +22,7 @@ const login = async (formData: FormData): Promise<void> => {
     const someError = error as CredentialsSignin;
     return console.log(someError.cause);
   }
-  redirect("/");
+  redirect("/dashboard");
 };
 
 const register = async (formData: FormData): Promise<void> => {
@@ -60,7 +60,7 @@ const register = async (formData: FormData): Promise<void> => {
       const someError = error as CredentialsSignin;
       return console.log(someError.cause);
     }
-    redirect("/");
+    redirect("/dashboard");
   }
 };
 
