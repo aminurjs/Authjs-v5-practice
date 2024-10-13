@@ -1,14 +1,44 @@
 import mongoose from "mongoose";
 
-const connectDB = async () => {
+interface Cached {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
+const cached: Cached = {
+  conn: null,
+  promise: null,
+};
+
+export const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI!);
-    console.log("Successfully connected to mongoDB");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.log("🚀 ~ connect ~ process.env.MONGO_URI:", process.env.MONGO_URI);
+    if (cached.conn) {
+      return cached.conn;
+    }
+    if (!cached.promise) {
+      cached.promise = mongoose.connect(process.env.MONGO_URI ?? "").then((mongoose) => {
+        return mongoose;
+      });
+    }
+
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    throw error;
   }
 };
 
-export default connectDB;
+export const disconnect = async () => {
+  if (cached.conn) {
+    try {
+      await mongoose.connection.close();
+      cached.conn = null;
+      cached.promise = null;
+      console.log("Disconnected from MongoDB");
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+};
