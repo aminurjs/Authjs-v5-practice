@@ -1,13 +1,8 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
 const Home = async () => {
-  const session = await auth();
-  if (session?.user) redirect("/dashboard");
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Secure Authentication with Auth.js v5</h1>

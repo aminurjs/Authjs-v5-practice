@@ -1,5 +1,3 @@
-import { login } from "@/actions/auth";
-import { auth, signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,12 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 
 const Login = async () => {
-  const session = await auth();
-  if (session?.user) redirect("/dashboard");
   return (
     <Card className="mt-10 max-w-md w-full mx-auto">
       <CardHeader>
@@ -21,12 +16,12 @@ const Login = async () => {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <form action={login}>
+          <form>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" placeholder="example@gmail.com" type="email" name="email" />
             </div>
-            <div className="grid gap-2">
+            <div className="grid gap-2 mt-4">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link href="#" className="ml-auto inline-block text-sm underline">
@@ -51,13 +46,7 @@ const Login = async () => {
           </div>
 
           <div className="flex gap-4 mb-2">
-            <form
-              className="w-full"
-              action={async () => {
-                "use server";
-                await signIn("google");
-              }}
-            >
+            <form className="w-full">
               <Button variant="outline" type="submit" className="w-full">
                 <Image
                   src="/google.svg"
@@ -69,13 +58,7 @@ const Login = async () => {
                 Google
               </Button>
             </form>
-            <form
-              className="w-full"
-              action={async () => {
-                "use server";
-                await signIn("github", { redirectTo: "/dashboard" });
-              }}
-            >
+            <form className="w-full">
               <Button variant="outline" type="submit" className="w-full">
                 <Github className="h-4 w-4 text-neutral-800 dark:text-neutral-300 mr-2" />
                 Github

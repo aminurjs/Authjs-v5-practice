@@ -11,11 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { auth, signOut } from "@/auth";
+// import { auth, signOut } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = async () => {
-  const session = await auth();
+  // const session = await auth();
+  const session = null;
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -82,17 +83,23 @@ const Navbar = async () => {
             />
           </div>
         </form>
-        {session?.user ? (
+        {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  {<AvatarImage src={session.user.image || ""} />}
+                  {
+                    <AvatarImage
+                      // src={session.user.image || ""}
+                      src={""}
+                    />
+                  }
+
                   <AvatarFallback>
-                    {session?.user?.name
+                    {/* {session?.user?.name
                       ?.split(" ")
                       .map((part) => part[0].toUpperCase())
-                      .join("")}
+                      .join("")} */}
                   </AvatarFallback>
                 </Avatar>
 
@@ -107,10 +114,10 @@ const Navbar = async () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer" title="Log out">
                 <form
-                  action={async () => {
-                    "use server";
-                    await signOut();
-                  }}
+                // action={async () => {
+                //   "use server";
+                //   await signOut();
+                // }}
                 >
                   <button type="submit">Log out</button>
                 </form>
