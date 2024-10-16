@@ -28,6 +28,7 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/register";
 import Social from "./social";
+import { Loader2 } from "lucide-react";
 
 const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -111,7 +112,14 @@ const RegisterForm = () => {
               <FormError message={error} />
               <FormSuccess message={success} />
               <Button disabled={isPending} type="submit" className="w-full mt-4">
-                Create an account
+                {!isPending ? (
+                  "Create an account"
+                ) : (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                )}
               </Button>
             </form>
           </Form>

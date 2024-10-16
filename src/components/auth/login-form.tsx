@@ -22,6 +22,7 @@ import { FormSuccess } from "@/components/form-success";
 import { login } from "@/actions/login";
 import Social from "./social";
 import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -47,7 +48,7 @@ const LoginForm = () => {
     setTransition(() => {
       login(values).then((data) => {
         setError(data?.error);
-        // setSuccess(data.success);
+        setSuccess(data?.success);
       });
     });
   };
@@ -102,7 +103,14 @@ const LoginForm = () => {
               <FormError message={error || urlError} />
               <FormSuccess message={success} />
               <Button disabled={isPending} type="submit" className="w-full mt-6">
-                Login
+                {!isPending ? (
+                  "Login"
+                ) : (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                )}
               </Button>
             </form>
           </Form>
