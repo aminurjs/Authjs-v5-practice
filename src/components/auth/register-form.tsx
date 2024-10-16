@@ -13,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,10 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { register } from "@/actions/register";
+import Social from "./social";
 
 const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -56,7 +55,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="mt-10 max-w-md w-full mx-auto">
+    <Card className="mt-10 max-w-md w-full mx-auto mb-5">
       <CardHeader>
         <CardTitle className="text-xl"> Welcome</CardTitle>
         <CardDescription> Please provide all the necessary information</CardDescription>
@@ -121,26 +120,7 @@ const RegisterForm = () => {
             <span className="w-full h-px  absolute left-0 top-1/2 translate-y-1/2" />
           </div>
 
-          <div className="flex gap-4 mb-2">
-            <form className="w-full">
-              <Button disabled={isPending} variant="outline" type="submit" className="w-full">
-                <Image
-                  src="/google.svg"
-                  className="h-4 w-4 text-neutral-800 dark:text-neutral-300 mr-2"
-                  width={50}
-                  height={50}
-                  alt="google"
-                />
-                Google
-              </Button>
-            </form>
-            <form className="w-full">
-              <Button disabled={isPending} variant="outline" type="submit" className="w-full">
-                <GitHubLogoIcon className="h-4 w-4 text-neutral-800 dark:text-neutral-300 mr-2" />
-                Github
-              </Button>
-            </form>
-          </div>
+          <Social isPending={isPending} />
         </div>
       </CardContent>{" "}
       <CardFooter className="flex flex-col gap-2">

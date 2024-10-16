@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,12 +17,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/actions/login";
+import Social from "./social";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email is already use in different provider."
+      : "";
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, setTransition] = useTransition();
@@ -41,8 +46,8 @@ const LoginForm = () => {
 
     setTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        // setSuccess(data.success);
       });
     });
   };
@@ -94,7 +99,7 @@ const LoginForm = () => {
                   </FormItem>
                 )}
               />
-              <FormError message={error} />
+              <FormError message={error || urlError} />
               <FormSuccess message={success} />
               <Button disabled={isPending} type="submit" className="w-full mt-6">
                 Login
@@ -105,27 +110,7 @@ const LoginForm = () => {
             <span className="text-neutral-800 dark:text-neutral-300 text-lg bg-card z-10">or</span>
             <span className="w-full h-px  absolute left-0 top-1/2 translate-y-1/2" />
           </div>
-
-          <div className="flex gap-4 mb-2">
-            <form className="w-full">
-              <Button disabled={isPending} variant="outline" type="submit" className="w-full">
-                <Image
-                  src="/google.svg"
-                  className="h-4 w-4 text-neutral-800 dark:text-neutral-300 mr-2"
-                  width={50}
-                  height={50}
-                  alt="google"
-                />
-                Google
-              </Button>
-            </form>
-            <form className="w-full">
-              <Button disabled={isPending} variant="outline" type="submit" className="w-full">
-                <GitHubLogoIcon className="h-4 w-4 text-neutral-800 dark:text-neutral-300 mr-2" />
-                Github
-              </Button>
-            </form>
-          </div>
+          <Social isPending={isPending} />
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
