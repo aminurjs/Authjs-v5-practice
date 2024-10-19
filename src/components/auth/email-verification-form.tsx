@@ -12,10 +12,9 @@ import { FormSuccess } from "@/components/form-success";
 
 const EmailVerificationForm = () => {
   const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
-
-  const token = searchParams.get("token");
 
   const onSubmit = useCallback(() => {
     if (!token) {

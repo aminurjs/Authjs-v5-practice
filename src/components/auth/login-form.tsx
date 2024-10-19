@@ -87,12 +87,8 @@ const LoginForm = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex items-center">
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                      <Link href="#" className="ml-auto inline-block text-sm underline">
-                        Forgot your password?
-                      </Link>
-                    </div>
+                    <FormLabel htmlFor="password">Password</FormLabel>
+
                     <FormControl>
                       <Input {...field} disabled={isPending} type="password" placeholder="******" />
                     </FormControl>
@@ -100,6 +96,12 @@ const LoginForm = () => {
                   </FormItem>
                 )}
               />
+
+              <div className="flex items-center justify-end">
+                <Link href="/auth/reset" className="ml-auto inline-block text-sm underline">
+                  Forgot your password?
+                </Link>
+              </div>
               <FormError message={error || urlError} />
               <FormSuccess message={success} />
               <Button disabled={isPending} type="submit" className="w-full mt-6">
