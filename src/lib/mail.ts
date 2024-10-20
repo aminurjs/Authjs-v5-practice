@@ -2,6 +2,36 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const sendTwoFactorEmail = async (email: string, code: string) => {
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "Your Two-Factor Authentication Code",
+    html: `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
+          <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <h1 style="color: #333; font-size: 24px;">Your Two-Factor Authentication Code</h1>
+              <p style="line-height: 1.5; margin: 16px 0;">Hello,</p>
+              <p style="line-height: 1.5; margin: 16px 0;">For additional security, we require you to enter the following code to complete your sign-in process:</p>
+              <div style="display: inline-block; padding: 12px 24px; margin-top: 20px; font-size: 20px; font-weight: bold; color: #1e293b; background-color: #e2e8f0; border-radius: 6px;">${code}</div>
+              <p style="line-height: 1.5; margin: 16px 0;">If you didn’t request this code, please contact our support team immediately.</p>
+              <p style="line-height: 1.5; margin: 16px 0;">Best regards,<br>Your Company Team</p>
+              <div style="font-size: 12px; color: #666; margin-top: 20px;">
+                  <p>This is an automated message, please do not reply.</p>
+              </div>
+          </div>
+      </body>
+      </html>
+    `,
+  });
+};
+
 export const sendPasswordResetEmail = async (email: string, resetToken: string) => {
   const resetLink = `http://localhost:3000/auth/new-password?token=${resetToken}`;
 
