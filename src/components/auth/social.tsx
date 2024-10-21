@@ -6,6 +6,7 @@ import Image from "next/image";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 type Pending = {
   isPending: boolean;
@@ -13,9 +14,11 @@ type Pending = {
 type Provider = "google" | "github";
 
 const Social = ({ isPending }: Pending) => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const socialSignIn = (provider: Provider) => {
     signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   };
 
