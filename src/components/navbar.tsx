@@ -115,13 +115,13 @@ const Navbar = async () => {
           </DropdownMenu>
         ) : (
           <div className="flex gap-5">
-            <Link href="/login">
+            <Link href="/auth/login">
               {" "}
               <Button size="sm" variant="outline">
                 Login
               </Button>
             </Link>
-            <Link href="/register">
+            <Link href="/auth/register">
               <Button size="sm">Register</Button>
             </Link>
           </div>
