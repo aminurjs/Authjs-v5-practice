@@ -30,9 +30,10 @@ export default auth((req) => {
     if (nextUrl.search) {
       callbackUrl = nextUrl.search;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-    return NextResponse.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
+    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 
   return NextResponse.next();
